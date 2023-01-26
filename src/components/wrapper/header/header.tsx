@@ -1,7 +1,5 @@
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
-import Form from 'react-bootstrap/Form'
-import Nav from 'react-bootstrap/Nav'
 import Navbar from 'react-bootstrap/Navbar'
 import Link from 'next/link'
 import { NextPage } from 'next/types'
@@ -24,14 +22,7 @@ const Header: NextPage = () => {
           MidShop
         </Link>
         <Navbar.Toggle aria-controls="navbarScroll" />
-        <Form className="d-flex">
-          <Form.Control
-            type="search"
-            placeholder="Search"
-            className="me-2"
-            aria-label="Search"
-          />
-        </Form>
+
         <Link className="link me-2" href="/basket">
           Basket<Badge bg="secondary">{basketCount}</Badge>
         </Link>
