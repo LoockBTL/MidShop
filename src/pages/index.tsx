@@ -1,50 +1,55 @@
-import Wrapper from '@/components/wrapper/wrapper'
-import { NextPage } from 'next/types'
-import { Container } from 'react-bootstrap'
-import { GetServerSideProps } from 'next'
-import $axios from '@/utils/axios'
-import { AxiosResponse } from 'axios'
-import { CategoryInterface, ProductInterface } from '@/types/product-types'
-import Card from 'react-bootstrap/Card'
-import Link from 'next/dist/client/link'
+import Wrapper from "@/components/wrapper/wrapper";
+import { NextPage } from "next/types";
+import { Container } from "react-bootstrap";
+import { GetServerSideProps } from "next";
+import $axios from "@/utils/axios";
+import { AxiosResponse } from "axios";
+import { CategoryInterface, ProductInterface } from "@/types/product-types";
+import Card from "react-bootstrap/Card";
+import Link from "next/dist/client/link";
 // https://api.escuelajs.co/api/v1/categories?offset=5&limit=5
 
 interface HomeInterface {
-  categories: CategoryInterface[]
-  products: ProductInterface[]
+  categories: CategoryInterface[];
+  products: ProductInterface[];
 }
 
 export const getServerSideProps: GetServerSideProps<
   HomeInterface
 > = async () => {
   const categoriesRes: AxiosResponse<CategoryInterface[]> = await $axios.get(
-    '/categories?offset=5&limit=5'
-  )
+    "/categories?offset=5&limit=5"
+  );
   const productRes: AxiosResponse<ProductInterface[]> = await $axios.get(
-    '/products?offset=0&limit=10'
-  )
-  const products: ProductInterface[] = productRes.data
-  const categories: CategoryInterface[] = categoriesRes.data
+    "/products?offset=0&limit=10"
+  );
+  const products: ProductInterface[] = productRes.data;
+  const categories: CategoryInterface[] = categoriesRes.data;
   return {
     props: {
       categories,
       products,
     },
-  }
-}
+  };
+};
 
 const Home: NextPage<HomeInterface> = ({ categories, products }) => {
   return (
     <Container className="mt-3">
       <h3>Products</h3>
-      <div className="d-flex flex-wrap">
+      <div className="d-flex flex-wrap row">
         {products.map((obj) => (
           <Link
             key={obj.id}
             href={`/product/${obj.id}`}
-            style={{ textDecoration: 'none' }}
+            style={{
+              textDecoration: "none",
+              display: "flex",
+              flex: "row wrap",
+            }}
+            className="col-xs-6 col-sm-6 col-md-4 col-lg-2"
           >
-            <Card style={{ width: '15rem', height: '18em' }} className="m-2">
+            <Card className="m-2">
               <Card.Img variant="left" src={obj.images[0]} />
               <Card.Body>
                 <Card.Title>{obj.title}</Card.Title>
@@ -60,9 +65,9 @@ const Home: NextPage<HomeInterface> = ({ categories, products }) => {
           <Link
             key={obj.id}
             href={`/categories/${obj.id}`}
-            style={{ textDecoration: 'none' }}
+            style={{ textDecoration: "none" }}
           >
-            <Card style={{ width: '15rem', height: '17em' }} className="m-2">
+            <Card style={{ width: "15rem", height: "17em" }} className="m-2">
               <Card.Img variant="top" src={obj.image} height={200} />
               <Card.Body>
                 <Card.Title>{obj.name}</Card.Title>
@@ -72,7 +77,7 @@ const Home: NextPage<HomeInterface> = ({ categories, products }) => {
         ))}
       </div>
     </Container>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
