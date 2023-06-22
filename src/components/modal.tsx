@@ -1,17 +1,18 @@
-import Button from 'react-bootstrap/Button'
-import { NextPage } from 'next/types'
-import ModalWindow from 'react-bootstrap/Modal'
-import { SummaryOrder } from '@/types/product-types'
-import Router from 'next/router'
-import { Card } from 'react-bootstrap'
-import { useAppDispatch } from '@/store/store'
-import { basketActions } from '@/store/reducers/basketSlice'
+import Button from "react-bootstrap/Button";
+import { NextPage } from "next/types";
+import ModalWindow from "react-bootstrap/Modal";
+import { SummaryOrder } from "@/types/product-types";
+import Router from "next/router";
+import { Card } from "react-bootstrap";
+import { RootState, useAppDispatch } from "@/store/store";
+import { basketActions } from "@/store/reducers/basketSlice";
+import { useSelector } from "react-redux";
 
 interface ModalProps {
-  active: boolean
-  setActive: any
-  title: string
-  object: SummaryOrder
+  active: boolean;
+  setActive: any;
+  title: string;
+  object: SummaryOrder;
 }
 
 const ModalConfirm: NextPage<ModalProps> = ({
@@ -23,8 +24,10 @@ const ModalConfirm: NextPage<ModalProps> = ({
   const totalPrice = object.basket.reduce(
     (acc, obj) => acc + obj.price * obj.count,
     0
-  )
-  const dispatch = useAppDispatch()
+  );
+  const theme = useSelector((state: RootState) => state.user.theme);
+
+  const dispatch = useAppDispatch();
   return (
     <ModalWindow show={active} centered>
       <ModalWindow.Header>
@@ -47,13 +50,13 @@ const ModalConfirm: NextPage<ModalProps> = ({
         </div>
         <div className="d-flex">
           {object.basket.map((obj) => (
-            <Card key={obj.id} style={{ width: '150px' }} className="m-2">
+            <Card key={obj.id} style={{ width: "150px" }} className="m-2">
               <Card.Img src={obj.images} />
               <Card.Body>
-                <Card.Title style={{ fontSize: '15px' }}>
+                <Card.Title style={{ fontSize: "15px" }}>
                   {obj.title}
                 </Card.Title>
-                <Card.Text style={{ fontSize: '15px' }}>
+                <Card.Text style={{ fontSize: "15px" }}>
                   Count: {obj.count * obj.count}
                 </Card.Text>
               </Card.Body>
@@ -67,24 +70,24 @@ const ModalConfirm: NextPage<ModalProps> = ({
         <Button
           variant="danger"
           onClick={() => {
-            setActive(false)
+            setActive(false);
           }}
         >
           Close
         </Button>
         <Button
-          value="success"
+          variant={theme === "dark" ? "secondary" : "primary"}
           onClick={() => {
-            dispatch(basketActions.clearBusket())
-            Router.push('/')
-            setActive(false)
+            dispatch(basketActions.clearBusket());
+            Router.push("/");
+            setActive(false);
           }}
         >
           Confirm
         </Button>
       </ModalWindow.Footer>
     </ModalWindow>
-  )
-}
+  );
+};
 
-export default ModalConfirm
+export default ModalConfirm;

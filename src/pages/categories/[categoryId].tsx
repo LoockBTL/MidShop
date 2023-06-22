@@ -10,6 +10,8 @@ import Link from "next/dist/client/link";
 import Form from "react-bootstrap/Form";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 // https://api.escuelajs.co/api/v1/categories?offset=5&limit=5
 
@@ -32,12 +34,20 @@ export const getServerSideProps: GetServerSideProps<CategoryInterface> = async (
 };
 
 const Category: NextPage<CategoryInterface> = ({ products }) => {
+  const theme = useSelector((state: RootState) => state.user.theme);
+
   const [searchParams, setSearchParams] = useState("");
   const [maxValue, setMax] = useState("1000");
   const [minValue, setMin] = useState("0");
   return (
     <Container className="d-flex">
-      <Card className="sticky-top">
+      <Card
+        className="sticky-top"
+        style={{
+          backgroundColor: theme === "dark" ? "#6c757d" : "#ffffff",
+          color: theme === "dark" ? "#ffffff" : "#292929",
+        }}
+      >
         <h3>Search</h3>
         <Form.Control
           value={searchParams}
@@ -142,7 +152,12 @@ const Category: NextPage<CategoryInterface> = ({ products }) => {
             >
               <Card style={{ width: "15rem", height: "18em" }} className="m-2">
                 <Card.Img variant="left" src={obj.images[0]} />
-                <Card.Body>
+                <Card.Body
+                  style={{
+                    backgroundColor: theme === "dark" ? "#6c757d" : "#ffffff",
+                    color: theme === "dark" ? "#ffffff" : "#292929",
+                  }}
+                >
                   <Card.Title>{obj.title}</Card.Title>
                   <Card.Text>Price: {obj.price}$</Card.Text>
                 </Card.Body>

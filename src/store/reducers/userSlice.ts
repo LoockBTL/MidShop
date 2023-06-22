@@ -1,69 +1,74 @@
-import { LoginData, RegisterData } from '@/types/user-types'
-import $axios from '@/utils/axios'
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { AxiosResponse } from 'axios'
+import { LoginData, RegisterData } from "@/types/user-types";
+import $axios from "@/utils/axios";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { AxiosResponse } from "axios";
 
 type Error = {
-  message: string
-}
+  message: string;
+};
 interface UserState {
-  status?: string
-  access_token: string
-  refresh_token: string
-  registration?: string
+  status?: string;
+  access_token: string;
+  refresh_token: string;
+  registration?: string;
+  theme: "dark" | "light";
 }
 
 export const loginCallApi = createAsyncThunk<
   UserState,
   LoginData,
   { rejectValue: Error }
->('users/loginCallApi', async (data: LoginData, thunkApi) => {
+>("users/loginCallApi", async (data: LoginData, thunkApi) => {
   const response: AxiosResponse<UserState> = await $axios.post(
-    '/auth/login',
+    "/auth/login",
     data
-  )
+  );
   if (response.status !== 201) {
     return thunkApi.rejectWithValue({
-      message: 'Failde to login',
-    })
+      message: "Failde to login",
+    });
   }
-  return response.data
-})
+  return response.data;
+});
 
 const initialState: UserState = {
-  status: '',
-  access_token: '',
-  refresh_token: '',
-  registration: '',
-}
+  status: "",
+  access_token: "",
+  refresh_token: "",
+  registration: "",
+  theme: "light",
+};
 
 const userSlice = createSlice({
-  name: 'users',
+  name: "users",
   initialState,
   reducers: {
     logout: (state) => {
-      state.status = ''
-      state.access_token = ''
-      state.refresh_token = ''
+      state.status = "";
+      state.access_token = "";
+      state.refresh_token = "";
     },
     register: (state, action: PayloadAction<RegisterData>) => {
-      state.registration = 'Success'
+      state.registration = "Success";
+    },
+    changeTheme: (state) => {
+      state.theme = state.theme === "dark" ? "light" : "dark";
     },
   },
   extraReducers: (builder) => {
     builder
       .addCase(loginCallApi.pending, (state) => {
-        state.status = 'Loading'
+        state.status = "Loading";
       })
       .addCase(loginCallApi.fulfilled, (state, { payload }) => {
-        state.status = 'Login'
-        state.access_token = payload.access_token
-        state.refresh_token = payload.refresh_token
+        state.status = "Login";
+        state.access_token = payload.access_token;
+        state.refresh_token = payload.refresh_token;
       })
       .addCase(loginCallApi.rejected, (state, { payload }) => {
-        state.status = payload?.message || 'Error'
-      })
+        state.status = payload?.message || "Error";
+      });
   },
-})
+});
 
-export const { reducer: userReducer, actions: userActions } = userSlice
+export const { reducer: userReducer, actions: userActions } = userSlice;

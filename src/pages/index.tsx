@@ -7,6 +7,8 @@ import { AxiosResponse } from "axios";
 import { CategoryInterface, ProductInterface } from "@/types/product-types";
 import Card from "react-bootstrap/Card";
 import Link from "next/dist/client/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 // https://api.escuelajs.co/api/v1/categories?offset=5&limit=5
 
 interface HomeInterface {
@@ -34,9 +36,17 @@ export const getServerSideProps: GetServerSideProps<
 };
 
 const Home: NextPage<HomeInterface> = ({ categories, products }) => {
+  const theme = useSelector((state: RootState) => state.user.theme);
+
   return (
-    <Container className="mt-3">
-      <h3>Products</h3>
+    <Container className="pt-3">
+      <h3
+        style={{
+          color: theme === "dark" ? "#ffffff" : "#292929",
+        }}
+      >
+        Products
+      </h3>
       <div className="d-flex flex-wrap row">
         {products.map((obj) => (
           <Link
@@ -51,7 +61,12 @@ const Home: NextPage<HomeInterface> = ({ categories, products }) => {
           >
             <Card className="m-2">
               <Card.Img variant="left" src={obj.images[0]} />
-              <Card.Body>
+              <Card.Body
+                style={{
+                  backgroundColor: theme === "dark" ? "#6c757d" : "#ffffff",
+                  color: theme === "dark" ? "#ffffff" : "#292929",
+                }}
+              >
                 <Card.Title>{obj.title}</Card.Title>
                 <Card.Text>Price: {obj.price}$</Card.Text>
               </Card.Body>
@@ -59,7 +74,13 @@ const Home: NextPage<HomeInterface> = ({ categories, products }) => {
           </Link>
         ))}
       </div>
-      <h3>Categories</h3>
+      <h3
+        style={{
+          color: theme === "dark" ? "#ffffff" : "#292929",
+        }}
+      >
+        Categories
+      </h3>
       <div className="d-flex flex-wrap">
         {categories.map((obj) => (
           <Link
@@ -69,7 +90,12 @@ const Home: NextPage<HomeInterface> = ({ categories, products }) => {
           >
             <Card style={{ width: "15rem", height: "17em" }} className="m-2">
               <Card.Img variant="top" src={obj.image} height={200} />
-              <Card.Body>
+              <Card.Body
+                style={{
+                  backgroundColor: theme === "dark" ? "#6c757d" : "#ffffff",
+                  color: theme === "dark" ? "#ffffff" : "#292929",
+                }}
+              >
                 <Card.Title>{obj.name}</Card.Title>
               </Card.Body>
             </Card>

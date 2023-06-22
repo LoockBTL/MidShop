@@ -1,22 +1,23 @@
-import Button from 'react-bootstrap/Button'
-import Container from 'react-bootstrap/Container'
-import Navbar from 'react-bootstrap/Navbar'
-import Link from 'next/link'
-import { NextPage } from 'next/types'
-import { RootState, useAppDispatch } from '@/store/store'
-import { useSelector } from 'react-redux'
-import { userActions } from '@/store/reducers/userSlice'
-import Badge from 'react-bootstrap/Badge'
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+import Navbar from "react-bootstrap/Navbar";
+import Link from "next/link";
+import { NextPage } from "next/types";
+import { RootState, useAppDispatch } from "@/store/store";
+import { useSelector } from "react-redux";
+import { userActions } from "@/store/reducers/userSlice";
+import Badge from "react-bootstrap/Badge";
 
 const Header: NextPage = () => {
-  const dispatch = useAppDispatch()
-  const status = useSelector((state: RootState) => state.user.status)
+  const dispatch = useAppDispatch();
+  const theme = useSelector((state: RootState) => state.user.theme);
+  const status = useSelector((state: RootState) => state.user.status);
   const basketCount = useSelector(
     (state: RootState) => state.basket.products.length
-  )
+  );
 
   return (
-    <Navbar bg="primary" expand="lg">
+    <Navbar bg={theme === "dark" ? "secondary" : "primary"} expand="lg">
       <Container fluid>
         <Link className="link m-2" href="/">
           MidShop
@@ -27,12 +28,21 @@ const Header: NextPage = () => {
           Basket<Badge bg="secondary">{basketCount}</Badge>
         </Link>
         <Navbar.Collapse id="navbarScroll" className="justify-content-end">
-          {status === 'Login' ? (
+          <Button
+            className="me-2"
+            variant={theme === "dark" ? "light" : "dark"}
+            onClick={() => {
+              dispatch(userActions.changeTheme());
+            }}
+          >
+            {theme === "dark" ? "Light" : "Dark"}
+          </Button>
+          {status === "Login" ? (
             <Button
               className="me-2"
               variant="danger"
               onClick={() => {
-                dispatch(userActions.logout())
+                dispatch(userActions.logout());
               }}
             >
               Exit
@@ -48,7 +58,7 @@ const Header: NextPage = () => {
         </Navbar.Collapse>
       </Container>
     </Navbar>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

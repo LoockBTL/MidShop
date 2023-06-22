@@ -41,6 +41,7 @@ export const getServerSideProps: GetServerSideProps<CategoryInterface> = async (
 
 const Category: NextPage<CategoryInterface> = ({ product, comments }) => {
   const user = useSelector((state: RootState) => state.user.status);
+  const theme = useSelector((state: RootState) => state.user.theme);
   const dispatch = useAppDispatch();
   const [productComments, setProductComments] = useState(comments);
   const [commentText, setCommentText] = useState("");
@@ -71,7 +72,7 @@ const Category: NextPage<CategoryInterface> = ({ product, comments }) => {
   };
   return (
     <Container>
-      <Container className="d-flex flex-wrap mt-3">
+      <Container className="d-flex flex-wrap pt-3">
         <div style={{ width: "50%" }}>
           <Carousel style={{ width: "100%" }}>
             {product.images.map((img) => (
@@ -82,16 +83,34 @@ const Category: NextPage<CategoryInterface> = ({ product, comments }) => {
           </Carousel>
         </div>
         <Card style={{ width: "40%" }} className="m-3" border="info">
-          <Card.Body>
+          <Card.Body
+            style={{
+              backgroundColor: theme === "dark" ? "#6c757d" : "#ffffff",
+              color: theme === "dark" ? "#ffffff" : "#292929",
+            }}
+          >
             <Card.Title>{product.title}</Card.Title>
             <Card.Text>{product.description}</Card.Text>
             <Card.Text>Price: {product.price}$</Card.Text>
-            <Button onClick={handleAddProductToBusket}>Buy</Button>
+            <Button
+              style={{ border: "1px solid black" }}
+              variant={theme === "dark" ? "secondary" : "primary"}
+              onClick={handleAddProductToBusket}
+            >
+              Buy
+            </Button>
           </Card.Body>
           <Card.Footer>Category: {product.category.name}</Card.Footer>
         </Card>
       </Container>
-      <h1 className="mt-2">Comments</h1>
+      <h1
+        className="mt-2"
+        style={{
+          color: theme === "dark" ? "#ffffff" : "#292929",
+        }}
+      >
+        Comments
+      </h1>
       <Form>
         <Form.Group className="mb-3">
           <Form.Label>Your comment</Form.Label>
@@ -106,14 +125,23 @@ const Category: NextPage<CategoryInterface> = ({ product, comments }) => {
               setCommentText(e.target.value);
             }}
           />
-          <Button className="mt-2" onClick={hadleAddComment}>
+          <Button
+            variant={theme === "dark" ? "secondary" : "primary"}
+            className="mt-2"
+            onClick={hadleAddComment}
+          >
             Send comment
           </Button>
         </Form.Group>
       </Form>
       {productComments.map((obj) => (
         <Card key={obj.id} className="mb-2">
-          <Card.Body>
+          <Card.Body
+            style={{
+              backgroundColor: theme === "dark" ? "#6c757d" : "#ffffff",
+              color: theme === "dark" ? "#ffffff" : "#292929",
+            }}
+          >
             <Card.Title>{obj.name}</Card.Title>
             <Card.Text>{obj.body}</Card.Text>
           </Card.Body>
