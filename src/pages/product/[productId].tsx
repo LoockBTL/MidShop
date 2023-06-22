@@ -113,7 +113,13 @@ const Category: NextPage<CategoryInterface> = ({ product, comments }) => {
       </h1>
       <Form>
         <Form.Group className="mb-3">
-          <Form.Label>Your comment</Form.Label>
+          <Form.Label
+            style={{
+              color: theme === "dark" ? "#ffffff" : "#292929",
+            }}
+          >
+            Your comment
+          </Form.Label>
           <Form.Control
             as="textarea"
             rows={2}
